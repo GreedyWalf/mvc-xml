@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--Jedis Pool Config-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--最大空闲连接数-->
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!--是否启用连接测试-->
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <!-- common 通用redis -->
+    <bean id="commonJedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+        <property name="port" value="${redis.common.port}"/>
+        <property name="hostName" value="${redis.common.hostName}"/>
+    </bean>
+
+    <bean class="org.springframework.data.redis.core.RedisTemplate" id="commonRedisTemplate">
+        <property name="connectionFactory" ref="commonJedisConnectionFactory"/>
+    </bean>
+
+    <!-- session 使用的redis -->
+    <bean id="sessionJedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+        <property name="port" value="${redis.session.port}"/>
+        <property name="hostName" value="${redis.session.hostName}"/>
+    </bean>
+
+    <bean class="org.springframework.data.redis.core.RedisTemplate" id="sessionRedisTemplate">
+        <property name="connectionFactory" ref="sessionJedisConnectionFactory"/>
+    </bean>
+</beans>

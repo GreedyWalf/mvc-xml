@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/mvc
+	 http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+	 http://www.springframework.org/schema/context
+	 http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+    <!--
+         xml说明：
+         当前xml主要是用于SpringMVC启动是加载，用于拦截所有请求，做控制映射，这里的配置不要配与SpringMVC无关配置
+         SpringMVC只是相当于Struts2的控制层
+     -->
+
+    <!-- 配置注解驱动 可以将request参数与绑定到controller参数上 -->
+    <mvc:annotation-driven/>
+
+    <!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
+    <context:component-scan base-package="com.qs.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+
+    <!--
+       配置当前视图层分发器，主要作用是给SpringMVC中对应返回的路径添加前后缀
+       说明：在原先的Struts2框架中，我们明确返回一个result，然后通过Struts2中的xml配置找到对应result的视图页面ftl
+            现在在SpringMVC中我们不需要指定明确路径，只需要返回对应目录地址，之所以能够这样是因为一下视图分发器进行的封装
+            它将在返回的结果中，自动拼接前后缀属性，用于找到具体文件
+       Configurer：用于指定view路径
+       ViewResolver：用于解析路径，添加后缀
+   -->
+
+    <!--FreeMarker配置，在spring解析view的时候会指定对应的路径，然后同时拼上viewResolver中的前后缀-->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/pages/"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="defaultEncoding">UTF-8</prop>
+            </props>
+        </property>
+        <!--这里的配置是为freemarker配置自定义权限标签-->
+        <!--<property name="freemarkerVariables">-->
+            <!--<map>-->
+                <!--<entry key="auth">-->
+                    <!--<bean class="com.qgutech.daily.base.auth.AuthorityDirectiveModel"/>-->
+                <!--</entry>-->
+            <!--</map>-->
+        <!--</property>-->
+    </bean>
+
+    <!-- 把逻辑视图名称映射到真正视图上 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="suffix" value=".ftl"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <!-- 此变量值为pageContext.request, 页面使用方法：Request.contextPath -->
+        <property name="requestContextAttribute" value="Request"/>
+        <!-- 给视图解析器配置优先級，多个视图解析时可以指定匹配的优先级 -->
+        <!--<property name="order" value="1"/>-->
+    </bean>
+
+    <!--静态资源路径映射，逻辑静态资源映射到物理静态资源映射-->
+    <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/css/**" location="/static/css/"/>
+    <mvc:resources mapping="/js/**" location="/static/js/"/>
+    <mvc:resources mapping="/images/**" location="/static/images/"/>
+    <mvc:resources mapping="/fonts/**" location="/static/fonts/"/>
+    <mvc:resources mapping="/pages/**" location="/pages/"/>
+
+
+    <!--
+       配置说明：
+       Spring拦截器：拦截器必须要配置Servlet中，否则启动加载不到拦截器。（也可以指定ContextParam来监听加载）
+       注意：/*和过滤器中的是有本质区别的，拦截器执行顺序是小于过滤器的，默认拦截的是地址
+   -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--静态资源不拦截-->
+            <mvc:exclude-mapping path="/static/**"/>
+            <!--公共错误信息页不拦截-->
+            <!--todo-->
+            <bean class="com.qs.base.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

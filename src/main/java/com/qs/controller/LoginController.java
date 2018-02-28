@@ -2,7 +2,6 @@ package com.qs.controller;
 
 import com.qs.base.context.ExecutionContext;
 import com.qs.entity.user.User;
-import com.qs.service.TestService;
 import com.qs.service.UserService;
 import com.qs.util.JsonResult;
 import com.qs.util.JsonStatus;
@@ -18,9 +17,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -28,8 +25,6 @@ import java.util.concurrent.TimeUnit;
 public class LoginController {
     @Resource
     private UserService userService;
-    @Resource
-    private TestService testService;
     @Resource
     private RedisTemplate sessionRedisTemplate;
 

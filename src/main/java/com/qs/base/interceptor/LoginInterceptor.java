@@ -1,5 +1,6 @@
 package com.qs.base.interceptor;
 
+import com.qs.base.common.OpenUri;
 import com.qs.base.context.ExecutionContext;
 import com.qs.util.RequestContextFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -15,18 +16,16 @@ import java.util.Map;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Resource(name = "sessionRedisTemplate")
-    private RedisTemplate sessionRedisTemplate;
+    private RedisTemplate<String,Map<String,String>> sessionRedisTemplate;
 
 
     //拦截所有的请求，在请求之前，验证用户的登录状态（在请求之前走拦截器，返回false之后，就不会走再调用请求了）
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //如果是登录、注册链接，不拦截
-        if(request.getRequestURI().contains("/login/login") || request.getRequestURI().contains("/login/ajaxLogin")
-                || request.getRequestURI().contains("/login/register") || request.getRequestURI().contains("/login/ajaxRegister")){
+        if(OpenUri.isSessionNotRequired(request.getRequestURI())){
             return true;
         }
-
 
         //注意request.getSession(false)之间的区别，默认参数为true，没有session会新建一个session对象
         HttpSession session = request.getSession();
@@ -41,7 +40,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         }
 
         if(StringUtils.isNotBlank(sessionId)){
-            Map<String, String> contextMap = (Map<String, String>) sessionRedisTemplate.opsForValue().get(sessionId);
+            Map<String, String> contextMap = sessionRedisTemplate.opsForValue().get(sessionId);
             if (contextMap != null) {
                 ExecutionContext.setContextMap(contextMap);
             }

@@ -3,6 +3,8 @@ package com.qs.service;
 import com.qs.entity.user.User;
 import com.qs.service.base.BaseService;
 
+import java.util.List;
+
 public interface UserService extends BaseService<User> {
 
     User findByUserName(String userName);
@@ -15,4 +17,11 @@ public interface UserService extends BaseService<User> {
      * @return 主键
      */
     String insertUser(User user);
+
+    /**
+     * 获取所有的学员列表
+     *
+     * @return
+     */
+    List<User> getUsers();
 }

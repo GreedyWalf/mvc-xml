@@ -1,12 +1,12 @@
 package com.qs.controller;
 
-import com.qs.base.context.ExecutionContext;
+import com.qs.base.common.SessionAccessor;
 import com.qs.entity.user.User;
 import com.qs.service.UserService;
 import com.qs.util.JsonResult;
 import com.qs.util.JsonStatus;
-import com.qs.util.RequestContextFactory;
 import com.qs.util.UUIDGenerator;
+import com.qs.util.WebConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -26,8 +28,9 @@ public class LoginController {
     @Resource
     private UserService userService;
     @Resource
-    private RedisTemplate sessionRedisTemplate;
-
+    private RedisTemplate<String,Map<String,String>> sessionRedisTemplate;
+    @Resource
+    private SessionAccessor sessionAccessor;
 
     @RequestMapping(value = "/login")
     public String login() {
@@ -53,40 +56,32 @@ public class LoginController {
             return jsonResult;
         }
 
-        //用户id
-        String userId = userOld.getId();
-        //后台生成一个sessionId，存储到cookie和redis中
-        String sessionId = UUIDGenerator.uuid();
-        String sessionKey = "LOGIN_" + userId;
-
-        RequestContextFactory.addCookie(response, "session_id", sessionId, -1);
-        sessionRedisTemplate.opsForValue().set(sessionKey, sessionId);
-        //这里失效时间暂时设置为60s，调试使用
-        sessionRedisTemplate.expire(sessionKey, 60, TimeUnit.SECONDS);
-
-        Map<String, String> contextMap = new HashMap<String, String>();
-        contextMap.put(ExecutionContext.USER_ID, userId);
-        contextMap.put(ExecutionContext.USER_NAME, userName);
-        sessionRedisTemplate.opsForValue().set(sessionId, contextMap);
-
+        //将登录信息保存在redis中
+        Map<String,String> contextMap = doLogin(userOld);
+        //将登录用户的sessionId存储在cookie中
+        sessionAccessor.store(request, response, contextMap);
         jsonResult.setMessage("恭喜你，登录成功啦！！");
         return jsonResult;
+    }
+
+    private Map<String,String> doLogin(User user){
+        Map<String, String> contextMap = new HashMap<String, String>();
+        contextMap.put(WebConstant.USER_ID, user.getId());
+        contextMap.put(WebConstant.USER_NAME, user.getUserName());
+        //将当前登录的用户id设置为sessionId
+        String sessionId = user.getId();
+        contextMap.put(WebConstant.SESSION_ID, sessionId);
+
+        //将登录的用户信息存储在redis中
+        String sessionKey = "LOGIN_" + sessionId;
+        sessionRedisTemplate.opsForValue().set(sessionKey, contextMap);
+        sessionRedisTemplate.expire(sessionKey, Integer.parseInt(sessionAccessor.getSessionMaxTime()), TimeUnit.SECONDS);
+        return contextMap;
     }
 
     @RequestMapping(value = "/index")
     public String showIndex() {
         return "/index/index";
-    }
-
-    private void addCookie(String name, String value, int maxAge, HttpServletResponse response) {
-        if (StringUtils.isBlank(name) || StringUtils.isBlank(value)) {
-            return;
-        }
-
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(maxAge);
-        cookie.setPath("/");
-        response.addCookie(cookie);
     }
 
     @RequestMapping("/register")

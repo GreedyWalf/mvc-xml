@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service(value = "userService")
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
@@ -43,5 +44,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         //将自动生成的主键更新为自己设置的主键
         update("id", userId, user);
         return userId;
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+    public List<User> getUsers() {
+        Criteria criteria = createCriteria();
+        return criteria.list();
     }
 }

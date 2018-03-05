@@ -8,7 +8,7 @@
     <title>首页</title>
 
     <#-- 加载layui样式-->
-    <link rel="stylesheet" href="${ctx}/assets/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="${ctx}/static/js/mudules/layui/css/layui.css"  media="all">
 </head>
 <body>
 
@@ -30,7 +30,7 @@
 </form>
 
 <#-- 引入layui全局js -->
-<script src="${ctx}/assets/layui/layui.js"></script>
+<script src="${ctx}/static/js/mudules/layui/layui.js"></script>
 
 <script>
     /* 直接使用use方式 */

@@ -77,14 +77,14 @@
        Spring拦截器：拦截器必须要配置Servlet中，否则启动加载不到拦截器。（也可以指定ContextParam来监听加载）
        注意：/*和过滤器中的是有本质区别的，拦截器执行顺序是小于过滤器的，默认拦截的是地址
    -->
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <!--静态资源不拦截-->
-            <mvc:exclude-mapping path="/static/**"/>
-            <!--公共错误信息页不拦截-->
-            <!--todo-->
-            <bean class="com.qs.base.interceptor.LoginInterceptor"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
+    <!--<mvc:interceptors>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--&lt;!&ndash;静态资源不拦截&ndash;&gt;-->
+            <!--<mvc:exclude-mapping path="/static/**"/>-->
+            <!--&lt;!&ndash;公共错误信息页不拦截&ndash;&gt;-->
+            <!--&lt;!&ndash;todo&ndash;&gt;-->
+            <!--<bean class="com.qs.base.interceptor.LoginInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
 </beans>

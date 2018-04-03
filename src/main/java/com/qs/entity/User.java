@@ -1,27 +1,33 @@
-package com.qs.entity.user;
+package com.qs.entity;
 
 
-import com.qs.entity.BaseEntity;
+import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+public class User implements Serializable {
 
-@Entity
-@Table(name = "t_user")
-public class User extends BaseEntity {
-
-    @Column(name = "user_name")
+    private String id;
     private String userName;
-
-    @Column
     private String password;
-
-    @Column
     private String email;
-
-    @Column
     private String mobile;
+
+
+    public User(){}
+
+    public User(String userName, String password, String email, String mobile) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.mobile = mobile;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUserName() {
         return userName;

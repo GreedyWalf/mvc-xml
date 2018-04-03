@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qs.dao.UserDao">
+    <!-- 自定义返回结果集 -->
+    <resultMap id="userMap" type="com.qs.entity.User">
+        <id property="id" column="id" javaType="java.lang.String"/>
+        <result property="userName" column="userName" javaType="java.lang.String"/>
+        <result property="password" column="password" javaType="java.lang.String"/>
+        <result property="email" column="email" javaType="java.lang.String"/>
+        <result property="mobile" column="mobile" javaType="java.lang.String"/>
+    </resultMap>
+
+
+    <!-- 使用UUID作为主键，在insert时自动插入值 -->
+    <insert id="save" parameterType="com.qs.entity.User">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') as id from dual
+        </selectKey>
+        insert into t_user (id,userName,password,email,mobile) values (#{id},#{userName},#{password},#{email},#{mobile});
+    </insert>
+
+
+    <select id="getAllUers" resultMap="userMap">
+        SELECT * FROM t_user
+    </select>
+</mapper>

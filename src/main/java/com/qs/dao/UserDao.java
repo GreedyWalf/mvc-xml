@@ -1,10 +1,10 @@
-package com.qs.service;
+package com.qs.dao;
 
 import com.qs.entity.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserDao {
 
     void save(User user);
 

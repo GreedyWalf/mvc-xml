@@ -30,9 +30,9 @@
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!-- 更新或者flush数据时拦截，主要用于更新数据库中的一些常用字段，比如createTime、createBy -->
-        <property name="entityInterceptor">
-           <bean class="com.qs.service.base.interceptor.BaseModelInterceptor"/>
-        </property>
+        <!--<property name="entityInterceptor">-->
+           <!--<bean class="com.qs.service.base.interceptor.BaseModelInterceptor"/>-->
+        <!--</property>-->
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>

@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,4 +116,24 @@ public class LoginController {
         return jsonResult;
     }
 
+    /**
+     * 测试下载
+     */
+    @RequestMapping(value = "/downloadFile")
+    public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String fileName = "download.jpg";
+        fileName = URLEncoder.encode(fileName,"utf-8");
+        response.setContentType("image/jpeg");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        InputStream resourceAsStream = request.getServletContext().getResourceAsStream("/static/298548.jpg");
+        OutputStream outputStream = response.getOutputStream();
+        byte[] buff = new byte[1024];
+        int len = 0;
+        while(-1 != (len = resourceAsStream.read(buff))){
+            outputStream.write(buff,0,len);
+        }
+
+        resourceAsStream.close();
+        outputStream.close();
+    }
 }

@@ -29,7 +29,6 @@ public class BaseModelInterceptor extends EmptyInterceptor {
         return true;
     }
 
-
     private boolean audit(Object entity, Object[] state, String[] propertyNames) {
         if (!(entity instanceof BaseEntity)) {
             return false;

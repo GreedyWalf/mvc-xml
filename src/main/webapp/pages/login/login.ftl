@@ -17,6 +17,7 @@
         密码：<input type="password" name="password"/> <br>
         <input type="checkbox" id="rememberMe" name="rememberMe" value="true"/>记住我 <br>
         <input type="button" value="登录" id="btnLogin"/>  <a href="${ctx!}/login/register">注册</a>
+        <a href="${ctx!}/login/downloadFile">点击可以下载么</a>
     </form>
 </div>
 </body>

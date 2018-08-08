@@ -172,6 +172,12 @@
             <version>3.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.1</version>
+        </dependency>
 
         <!--jetty启动最少依赖开始-->
         <dependency>

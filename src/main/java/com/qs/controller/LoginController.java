@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,7 +30,7 @@ public class LoginController {
     @Resource
     private UserService userService;
     @Resource
-    private RedisTemplate<String,Map<String,String>> sessionRedisTemplate;
+    private RedisTemplate<String, Map<String, String>> sessionRedisTemplate;
     @Resource
     private SessionAccessor sessionAccessor;
 
@@ -61,14 +59,14 @@ public class LoginController {
         }
 
         //将登录信息保存在redis中
-        Map<String,String> contextMap = doLogin(userOld);
+        Map<String, String> contextMap = doLogin(userOld);
         //将登录用户的sessionId存储在cookie中
         sessionAccessor.store(request, response, contextMap);
         jsonResult.setMessage("恭喜你，登录成功啦！！");
         return jsonResult;
     }
 
-    private Map<String,String> doLogin(User user){
+    private Map<String, String> doLogin(User user) {
         Map<String, String> contextMap = new HashMap<String, String>();
         contextMap.put(WebConstant.USER_ID, user.getId());
         contextMap.put(WebConstant.USER_NAME, user.getUserName());
@@ -122,15 +120,15 @@ public class LoginController {
     @RequestMapping(value = "/downloadFile")
     public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String fileName = "download.jpg";
-        fileName = URLEncoder.encode(fileName,"utf-8");
+        fileName = URLEncoder.encode(fileName, "utf-8");
         response.setContentType("image/jpeg");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
         InputStream resourceAsStream = request.getServletContext().getResourceAsStream("/static/298548.jpg");
         OutputStream outputStream = response.getOutputStream();
         byte[] buff = new byte[1024];
         int len = 0;
-        while(-1 != (len = resourceAsStream.read(buff))){
-            outputStream.write(buff,0,len);
+        while (-1 != (len = resourceAsStream.read(buff))) {
+            outputStream.write(buff, 0, len);
         }
 
         resourceAsStream.close();

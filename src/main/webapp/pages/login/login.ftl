@@ -18,6 +18,8 @@
         <input type="checkbox" id="rememberMe" name="rememberMe" value="true"/>记住我 <br>
         <input type="button" value="登录" id="btnLogin"/>  <a href="${ctx!}/login/register">注册</a>
         <a href="${ctx!}/login/downloadFile">点击可以下载么</a>
+        <a href="${ctx!}/login/downloadAndOpenFile">下载并打开图片</a>
+        <input type="button" value="监控关闭" id="monitor" onclick="monitor()"/>
     </form>
 </div>
 </body>
@@ -36,6 +38,17 @@
             $("input[name='password']").val(base64.decode(getCookie("password")));
         }
     });
+
+    var monitorState = 0;  //0 关闭 1开启
+    //开启关闭监控
+    function monitor() {
+        monitorState = 1;
+        var interval = setInterval(function(){
+
+        },10000);
+    }
+
+
 
     //登录
     $("#btnLogin").click(function () {

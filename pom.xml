@@ -17,6 +17,10 @@
         <spring-framework.version>4.1.5.RELEASE</spring-framework.version>
         <!-- hibernate -->
         <hibernate.version>4.3.5.Final</hibernate.version>
+
+        <commons-lang3.version>3.4</commons-lang3.version>
+        <commons-io.version>2.4</commons-io.version>
+        <commons-codec.version>1.10</commons-codec.version>
     </properties>
 
 
@@ -35,6 +39,23 @@
             <version>1.2.12</version>
         </dependency>
         <!-- 日志结束 -->
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+        </dependency>
+
 
         <!-- spring框架开始 -->
         <dependency>
@@ -91,9 +112,9 @@
             <version>${hibernate.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-jdbc</artifactId>-->
-            <!--<version>${spring-framework.version}</version>-->
+        <!--<groupId>org.springframework</groupId>-->
+        <!--<artifactId>spring-jdbc</artifactId>-->
+        <!--<version>${spring-framework.version}</version>-->
         <!--</dependency>-->
         <!-- aspectjweaver.jar这是Spring AOP所要用到的包 -->
         <dependency>
@@ -112,9 +133,9 @@
 
         <!-- postgresql数据库驱动 -->
         <!--<dependency>-->
-            <!--<groupId>postgresql</groupId>-->
-            <!--<artifactId>postgresql</artifactId>-->
-            <!--<version>9.1-901-1.jdbc4</version>-->
+        <!--<groupId>postgresql</groupId>-->
+        <!--<artifactId>postgresql</artifactId>-->
+        <!--<version>9.1-901-1.jdbc4</version>-->
         <!--</dependency>-->
 
         <!-- mysql驱动 -->
@@ -177,6 +198,18 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>2.2.1</version>
+        </dependency>
+
+        <!-- spring整合shiro框架 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.4.0</version>
         </dependency>
 
         <!--jetty启动最少依赖开始-->

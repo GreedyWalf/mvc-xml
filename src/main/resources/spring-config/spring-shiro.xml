@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 必须设置 -->
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login"/>
+        <property name="successUrl" value="/index"/>
+        <!--<property name="unauthorizedUrl" value="/unauthorized.jsp"/>-->
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 对静态资源设置匿名访问 -->
+                /static/** = anon
+                /login = anon
+                /ajaxLogin = anon
+                <!-- /** = authc 所有url都必须认证通过才可以访问-->
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="customRealm"/>
+    </bean>
+
+    <!-- 自定义领域 realm -->
+    <bean id="customRealm" class="com.qs.realm.CustomRealm">
+        <!-- 加入了密码匹配器之后，就会默认将前台传递过来的密码自动MD5加密 -->
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 加密的方式 -->
+                <constructor-arg index="0" type="java.lang.String" value="MD5"/>
+                <!-- 加密的次数，默认是1次 -->
+                <property name="hashIterations" value="2"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+</beans>

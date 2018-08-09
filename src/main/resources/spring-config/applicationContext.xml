@@ -23,7 +23,5 @@
     <!--采用import方式导入，不要在context-param中配置，否则，每个xml的Spring配置文件都需要重新配置Properties文件-->
     <import resource="spring-hibernate.xml"/>
     <import resource="spring-data-redis.xml"/>
-
-    <!-- 使用quartz定时任务 -->
-    <import resource="spring-task.xml"/>
+    <import resource="spring-shiro.xml"/>
 </beans>

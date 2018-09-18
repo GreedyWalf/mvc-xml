@@ -3,23 +3,211 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qs.service.mapper.UserMapper">
 
-    <!--
-       定义实体属性和数据库字段之间映射对应关系
-       jdbcType属性：org.apache.ibatis.type.JdbcType类中定义的枚举，需要大写
-   -->
-    <resultMap id="baseResultMap" type="com.qs.entity.User">
+    <!-- 定义实体属性和数据库字段之间映射对应关系 -->
+    <resultMap id="baseResultMap" type="User">
         <id column="user_id" property="userId" jdbcType="VARCHAR"/>
-        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <!--
+        javaType配置java对应的数据类型，大小写不敏感；
+        jdbcType属性：org.apache.ibatis.type.JdbcType类中定义的枚举，需要大写
+        -->
+        <result column="user_name" property="userName" javaType="string" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="baseColumnList">
         user_id, user_name
     </sql>
 
-    <select id="getAllUsers" resultMap="baseResultMap">
+    <!--
+        resultMap属性是必须的，指定数据库中字段封装到User类对应的属性中；
+        resultType：可以省略，和getAllUsers方法返回值一致
+     -->
+    <select id="getAllUsers" resultMap="baseResultMap" resultType="User">
         select
-        *
+        <include refid="baseColumnList"/>
         from t_bw_user
     </select>
+
+
+    <!--
+        parameterType：指定参数类型（入参为一个参数，基本类型可以使用#{value}指代，实际上这里value只是占位，任何字符串都可以）
+        resultType：指定数据库列名和pojo映射类型；
+        resultMap：封装为pojo时，列名和属性名之间映射；
+    -->
+    <select id="getUserByUserId" parameterType="String" resultType="User" resultMap="baseResultMap">
+        select * from t_bw_user where user_id = #{userId}
+    </select>
+
+
+    <!--
+        未使用@param注解，使用#{0}，#{1}参数占位，表示传入的两个参数
+    -->
+    <select id="getUserListByUserIdAndUserName" resultMap="baseResultMap">
+      select * from t_bw_user where user_id=#{0} and user_name=#{1}
+    </select>
+
+
+    <!--
+        使用@param注解，指定入参user对象为user，这里使用user.userId，user.userName获取pojo的属性；
+    -->
+    <select id="getUserList" resultMap="baseResultMap">
+        select * from t_bw_user
+        <where>
+            <if test="user.userId!=null">
+                and user_id=#{user.userId}
+            </if>
+            <if test="user.userName!=null">
+                or user_name=#{user.userName}
+            </if>
+        </where>
+    </select>
+
+
+    <!--
+        如果为pojo，可以在拼写sql时，直接使用属性名作为参数即可；（parameterType也可以省略）
+    -->
+    <select id="getUserList2" parameterType="User" resultMap="baseResultMap">
+        select * from t_bw_user
+        <where>
+            <if test="userId!=null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName!=null">
+                or user_name=#{userName}
+            </if>
+        </where>
+    </select>
+
+
+    <!--
+        直接使用hashMap的key作为参数名即可
+    -->
+    <select id="getUserListByMap" resultMap="baseResultMap">
+        select * from t_bw_user
+        <where>
+            <if test="userId!=null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName!=null">
+                or user_name=#{userName}
+            </if>
+        </where>
+    </select>
+
+    <!--
+        使用@param指定了入参hashMap别名为paramMap，使用paramMap.userId，paramMap.userName作为参数名即可；
+    -->
+    <select id="getUserListByMap2" resultMap="baseResultMap">
+        select * from t_bw_user
+        <where>
+            <if test="paramMap.userId!=null">
+                and user_id = #{paramMap.userId}
+            </if>
+            <if test="paramMap.userName!=null">
+                or user_name=#{paramMap.userName}
+            </if>
+        </where>
+    </select>
+
+
+    <!--
+        不使用@param指定入参集合的别名，默认使用list作为参数名，即：collection="list"；（parameterType参数可以省略）
+    -->
+    <select id="getUserListByUserIds" parameterType="ArrayList" resultMap="baseResultMap">
+        select * from t_bw_user
+        where user_id in
+        <foreach collection="list" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+    <!--
+        使用@param注解指定入参集合的别名，使用指定别名作为参数名，即：collection="指定参数名"；
+    -->
+    <select id="getUserListByUserIds2" resultMap="baseResultMap">
+        select * from t_bw_user
+        where user_id in
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+
+    <!-- 返回值为HashMap，封装为map -->
+    <select id="getUserIdAndUserMap" resultMap="baseResultMap">
+        select a.user_id,a.* from t_bw_user a
+        <where>
+            <foreach collection="list" item="userId" open="user_id in (" separator="," close=")">
+                #{userId}
+            </foreach>
+        </where>
+    </select>
+
+
+    <!--
+        selectKey标签：select replace(uuid(),'-','')生成uuid
+        order：BEFORE表示在执行insert之前执行；AFTER表示在执行insert之后执行；
+        resultType：select返回数据的类型；
+        keyProperty：表示select返回的uuid字符串会被设置到user对象的userId属性中；
+
+        insert标签最后插入数据，返回受影响的行数；
+    -->
+    <insert id="insertUser" parameterType="User">
+        <selectKey keyProperty="userId" order="BEFORE" resultType="String">
+            SELECT replace(uuid(), '-', '')
+        </selectKey>
+        insert into t_bw_user (user_id,user_name) values (#{userId},#{userName});
+    </insert>
+
+
+    <!--
+        批量保存，userId使用uuid生成
+        注意foreach标签使用
+    -->
+    <insert id="batchSave" parameterType="ArrayList">
+        insert into t_bw_user (user_id, user_name) values
+        <foreach item="user" collection="list" separator=",">
+            ((SELECT REPLACE(UUID(), '-', '') AS userId),#{user.userName})
+        </foreach>
+    </insert>
+
+
+    <!-- 批量更新 case。。when。。方式 效率较高 -->
+    <update id="batchUpdate" parameterType="java.util.List">
+        update t_bw_user
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="user_name=case" suffix="end,">
+                <foreach collection="list" item="user" index="index">
+                    <if test="user.userName!=null">
+                        when user_id=#{user.userId} then #{user.userName}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where user_id in
+        <foreach collection="list" index="index" item="user" separator="," open="(" close=")">
+            #{user.userId}
+        </foreach>
+    </update>
+
+
+    <!--
+        批量更新操作：
+        注意这里有2个坑，不知道是mybatis还是mysql默认不支持一次性更新多个sql语句，需要在url中添加&allowMultiQueries=true；
+        这里需要用${user.userId}取传递过来的参数值，不能用#{user.userId}，执行会报错；
+    -->
+    <update id="batchUpdate2" parameterType="ArrayList">
+        <foreach collection="userList" item="user" separator=";">
+            update t_bw_user
+            <trim prefix="set" suffixOverrides=",">
+                <if test="user.userName!=null">
+                    user_name='${user.userName}',
+                </if>
+            </trim>
+
+            <where>
+                user_id='${user.userId}'
+            </where>
+        </foreach>
+    </update>
 
 </mapper>

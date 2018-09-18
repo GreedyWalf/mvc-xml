@@ -8,15 +8,21 @@
 
     <!-- 配置别名 -->
     <typeAliases>
-        <!-- 批量扫描别名 -->
-        <!--<package name="com.qs.entity"/>-->
+        <!-- 指定类型的别名 -->
+        <typeAlias alias="String" type="java.lang.String"/>
+        <typeAlias alias="Integer" type="java.lang.Integer"/>
+        <typeAlias alias="Long" type="java.lang.Long"/>
+        <typeAlias alias="HashMap" type="java.util.HashMap"/>
+        <typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap"/>
+        <typeAlias alias="ArrayList" type="java.util.ArrayList"/>
+        <!-- 批量扫描别名，在实体映射配置文件中，可以使用定义包中类名代替类全路径（大小写不敏感） -->
+        <package name="com.qs.entity"/>
     </typeAliases>
 
     <!-- 配置mapper
     由于使用spring和mybatis的整合包进行mapper扫描，这里不需要配置了。
     必须遵循：mapper.xml和mapper.java文件同名且在一个目录
      -->
-
     <!-- <mappers>
     </mappers> -->
 </configuration>

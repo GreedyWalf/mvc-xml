@@ -12,9 +12,7 @@
 
 </div>
 
-
 <script src="${ctx}/static/js/mudules/layui/layui.js"></script>
-
 
 <script>
     /* 直接使用use方式 */

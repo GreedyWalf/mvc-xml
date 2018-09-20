@@ -7,7 +7,7 @@ public class JettyMain {
     public static void main(String[] args) throws Exception {
         Server jettyServer = new Server();
         SocketConnector conn = new SocketConnector();
-        conn.setPort(8899);
+        conn.setPort(8888);
         jettyServer.setConnectors(new Connector[]{conn});
         WebAppContext wah = new WebAppContext();
         wah.setContextPath("/mvc");

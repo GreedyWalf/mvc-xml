@@ -2,13 +2,14 @@ package com.qs.controller;
 
 import com.qs.entity.User;
 import com.qs.service.UserService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@RestController
+@Controller
+@RequestMapping(value = "/")
 public class TestController {
 
     @Resource
@@ -17,5 +18,10 @@ public class TestController {
     @RequestMapping(value = "/getAllUsers")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @RequestMapping(value = "/test")
+    public String test() {
+        return "test";
     }
 }

@@ -25,7 +25,6 @@
     </context:component-scan>
 
 
-
     <!--
        配置当前视图层分发器，主要作用是给SpringMVC中对应返回的路径添加前后缀
        说明：在原先的Struts2框架中，我们明确返回一个result，然后通过Struts2中的xml配置找到对应result的视图页面ftl
@@ -40,16 +39,26 @@
         <property name="templateLoaderPath" value="/pages/"/>
         <property name="freemarkerSettings">
             <props>
+                <prop key="template_update_delay">0</prop>
                 <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="number_format">#</prop>
+                <prop key="whitespace_stripping">true</prop>
             </props>
         </property>
+
         <!--这里的配置是为freemarker配置自定义权限标签-->
         <!--<property name="freemarkerVariables">-->
-            <!--<map>-->
-                <!--<entry key="auth">-->
-                    <!--<bean class="com.qgutech.daily.base.auth.AuthorityDirectiveModel"/>-->
-                <!--</entry>-->
-            <!--</map>-->
+        <!--<map>-->
+        <!--<entry key="auth">-->
+        <!--<bean class="com.qgutech.daily.base.auth.AuthorityDirectiveModel"/>-->
+        <!--</entry>-->
+        <!--</map>-->
         <!--</property>-->
     </bean>
 
@@ -60,7 +69,7 @@
         <!-- 此变量值为pageContext.request, 页面使用方法：Request.contextPath -->
         <property name="requestContextAttribute" value="Request"/>
         <!-- 给视图解析器配置优先級，多个视图解析时可以指定匹配的优先级 -->
-        <!--<property name="order" value="1"/>-->
+        <property name="order" value="0"/>
     </bean>
 
     <!--静态资源路径映射，逻辑静态资源映射到物理静态资源映射-->
@@ -78,13 +87,13 @@
        注意：/*和过滤器中的是有本质区别的，拦截器执行顺序是小于过滤器的，默认拦截的是地址
    -->
     <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--&lt;!&ndash;静态资源不拦截&ndash;&gt;-->
-            <!--<mvc:exclude-mapping path="/static/**"/>-->
-            <!--&lt;!&ndash;公共错误信息页不拦截&ndash;&gt;-->
-            <!--&lt;!&ndash;todo&ndash;&gt;-->
-            <!--<bean class="com.qs.base.interceptor.LoginInterceptor"/>-->
-        <!--</mvc:interceptor>-->
+    <!--<mvc:interceptor>-->
+    <!--<mvc:mapping path="/**"/>-->
+    <!--&lt;!&ndash;静态资源不拦截&ndash;&gt;-->
+    <!--<mvc:exclude-mapping path="/static/**"/>-->
+    <!--&lt;!&ndash;公共错误信息页不拦截&ndash;&gt;-->
+    <!--&lt;!&ndash;todo&ndash;&gt;-->
+    <!--<bean class="com.qs.base.interceptor.LoginInterceptor"/>-->
+    <!--</mvc:interceptor>-->
     <!--</mvc:interceptors>-->
 </beans>

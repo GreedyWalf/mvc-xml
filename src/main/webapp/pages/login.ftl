@@ -10,8 +10,8 @@
 <body>
 
 <form id="loginForm">
-    用户名：<input name="userName" value="admin"/>
-    密码：<input name="password" value="123456"/>
+    用户名：<input name="username" value="admin"/>
+    密码：<input name="password" value="123"/>
     <input type="button" id="btnLogin" value="登录"/>
 </form>
 
@@ -20,18 +20,18 @@
     $(function () {
         $("#btnLogin").click(function (e) {
             e.preventDefault();
-            var userName = $("input[name='userName']").val();
+            var username = $("input[name='username']").val();
             var password = $("input[name='password']").val();
             var loginParam = {
-                "userName": userName,
+                "username": username,
                 "password": password
             };
 
             $.post("${ctx}/ajaxLogin", loginParam, function (data) {
-                debugger
                 if (data && data.status === "SUCCESS") {
                     window.location.href='${ctx}/index';
                 } else {
+                    alert(data.msg || "登录失败！");
                     window.location.href='${ctx}/login';
                 }
             });

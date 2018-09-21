@@ -1,60 +1,81 @@
 package com.qs.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
-@Entity
-@Table(name = "t_role")
+/**
+ * 角色表
+ */
 public class Role implements Serializable {
+    private Long id;
+    private String role; //角色标识 程序中判断使用,如"admin"
+    private String description; //角色描述,UI界面显示使用
+    private Boolean available = Boolean.FALSE; //是否可用,如果不可用将不会添加给用户
 
-    @Id
-    @Column(name = "role_id")
-    @GeneratedValue(generator = "generator")
-    @GenericGenerator(name = "generator", strategy = "uuid")
-    private String roleId;
-
-    @Column(name = "role_name")
-    private String roleName;
-
-    @Column(name = "role_desc")
-    private String roleDesc;
-
-    @Column(name = "create_time")
-    private Date createTime;
-
-    public String getRoleId() {
-        return roleId;
+    public Role() {
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
+    public Role(String role, String description, Boolean available) {
+        this.role = role;
+        this.description = description;
+        this.available = available;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public Long getId() {
+        return id;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-
-    public Date getCreateTime() {
-        return createTime;
+    public String getRole() {
+        return role;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public void setRoleDesc(String roleDesc) {
-        this.roleDesc = roleDesc;
+    public String getDescription() {
+        return description;
     }
 
-    public String getRoleDesc() {
-        return roleDesc;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Role role = (Role) o;
+
+        if (id != null ? !id.equals(role.id) : role.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", role='" + role + '\'' +
+                ", description='" + description + '\'' +
+                ", available=" + available +
+                '}';
     }
 }

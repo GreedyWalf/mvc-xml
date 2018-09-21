@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 如果需要使用生成动态的salt值，则注入该类 -->
+    <!--<bean id="randomNumberGenerator" class="org.apache.shiro.crypto.SecureRandomNumberGenerator"/>-->
+
+    <!-- spring容器中注入密码生成器类 -->
+    <bean id="passwordHelper" class="com.qs.utils.PasswordHelper">
+        <!--<property name="randomNumberGenerator" ref="randomNumberGenerator"/>-->
+        <property name="algorithmName" value="${shiro.password.algorithmName}"/>
+        <property name="hashIterations" value="${shiro.password.hashIterations}"/>
+        <property name="salt" value="${shiro.password.salt}"/>
+    </bean>
+</beans>

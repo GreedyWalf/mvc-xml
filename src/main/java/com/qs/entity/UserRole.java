@@ -1,62 +1,56 @@
 package com.qs.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
-@Entity
-@Table(name = "t_user_role")
+/**
+ * 用户角色关系
+ */
 public class UserRole implements Serializable {
 
-    @Id
-    @Column(name = "user_role_id")
-    @GeneratedValue(generator = "generator")
-    @GenericGenerator(name = "generator", strategy = "uuid")
-    private String userRoleId;
+    private Long userId;
+    private Long roleId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserInfo userInfo;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-
-    @Column(name = "create_time")
-    private Date createTime;
-
-    public String getUserRoleId() {
-        return userRoleId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserRoleId(String userRoleId) {
-        this.userRoleId = userRoleId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public Role getRole() {
-        return role;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserRole userRole = (UserRole) o;
+
+        if (roleId != null ? !roleId.equals(userRole.roleId) : userRole.roleId != null) return false;
+        if (userId != null ? !userId.equals(userRole.userId) : userRole.userId != null) return false;
+
+        return true;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    @Override
+    public int hashCode() {
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (roleId != null ? roleId.hashCode() : 0);
+        return result;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "userId=" + userId +
+                ", roleId=" + roleId +
+                '}';
     }
 }

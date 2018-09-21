@@ -3,25 +3,17 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-    <!--
-        xml配置说明：
-        当前xml是监听器启动后默认读取的spring上下文文件，这里的文件配置配置项目相关内容
-        每个关联的继承框架都用单独的配置文件进行说明然后引入到此配置文件
-        注：不要把映射配置，路径拦截等相关内容配到这里
-    -->
+
     <!--优先加载Properties属性文件，用于后面bean的注解,多个文件用逗号隔开-->
-    <context:property-placeholder location="classpath:env.properties,classpath:config.properties"/>
+    <context:property-placeholder location="classpath:config.properties"/>
 
     <!--1. 扫描注解，这里过滤掉SpringMVC的注解-->
     <context:component-scan base-package="com.qs">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <!--加载项目统一异常处理方法-->
-    <!--<bean id="dyExceptionHandler" class="com.qgutech.daily.base.exception.DyExceptionHandler"/>-->
-
-    <!--采用import方式导入，不要在context-param中配置，否则，每个xml的Spring配置文件都需要重新配置Properties文件-->
-    <import resource="spring-hibernate.xml"/>
-    <import resource="spring-data-redis.xml"/>
+    <import resource="spring-bean.xml"/>
     <import resource="spring-shiro.xml"/>
+    <import resource="spring-mybatis.xml"/>
+    <import resource="spring-transaction.xml"/>
 </beans>

@@ -1,91 +1,81 @@
 package com.qs.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+import java.io.Serializable;
 
-import javax.persistence.*;
-import java.util.Date;
+/**
+ * 权限表
+ */
+public class Permission implements Serializable {
+    private Long id;
+    private String permission; //权限标识 程序中判断使用,如"user:create"
+    private String description; //权限描述,UI界面显示使用
+    private Boolean available = Boolean.FALSE; //是否可用,如果不可用将不会添加给用户
 
-@Entity
-@Table(name = "t_permission")
-public class Permission {
-
-    @Id
-    @Column(name = "permission_id")
-    @GeneratedValue(generator = "generator")
-    @GenericGenerator(name = "generator", strategy = "uuid")
-    private String permissionId;
-
-    @Column(name = "permission_name")
-    private String permissionName;
-
-    @Column(name = "parent_id")
-    private String parentId;
-
-    @Column(name = "url")
-    private String url;
-
-    @Column(name = "code")
-    private String code;
-
-    @Column(name = "sort")
-    private float sort;
-
-    @Column(name = "create_time")
-    private Date createTime;
-
-    public String getPermissionId() {
-        return permissionId;
+    public Permission() {
     }
 
-    public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId;
+    public Permission(String permission, String description, Boolean available) {
+        this.permission = permission;
+        this.description = description;
+        this.available = available;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public Long getId() {
+        return id;
     }
 
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String getPermission() {
+        return permission;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 
-    public String getUrl() {
-        return url;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getCode() {
-        return code;
+    public Boolean getAvailable() {
+        return available;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 
-    public float getSort() {
-        return sort;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Permission role = (Permission) o;
+
+        if (id != null ? !id.equals(role.id) : role.id != null) return false;
+
+        return true;
     }
 
-    public void setSort(float sort) {
-        this.sort = sort;
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", permission='" + permission + '\'' +
+                ", description='" + description + '\'' +
+                ", available=" + available +
+                '}';
     }
 }

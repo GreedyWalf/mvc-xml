@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qs.service.mapper.BillInfoMapper">
+    <resultMap id="BaseResultMap" type="com.qs.entity.BillInfo">
+        <id column="bill_id" property="billId" jdbcType="VARCHAR"/>
+        <result column="bill_type" property="billType" jdbcType="VARCHAR"/>
+        <result column="category_id" property="categoryId" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_reimburse" property="isReimburse" jdbcType="VARCHAR"/>
+        <result column="last_modify_by" property="lastModifyBy" jdbcType="VARCHAR"/>
+        <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+        <result column="money" property="money" jdbcType="DECIMAL"/>
+        <result column="record_date" property="recordDate" jdbcType="TIMESTAMP"/>
+        <result column="record_end_date" property="recordEndDate" jdbcType="TIMESTAMP"/>
+        <result column="record_start_date" property="recordStartDate" jdbcType="TIMESTAMP"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        bill_id, bill_type, category_id, create_by, create_time, is_reimburse, last_modify_by,
+        last_modify_time, money, record_date, record_end_date, record_start_date, remark,status
+    </sql>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qs.entity.BillInfoExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from t_bw_bill_info
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_bw_bill_info
+        where bill_id = #{billId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+     delete from t_bw_bill_info where bill_id = #{billId,jdbcType=VARCHAR}
+   </delete>
+
+    <insert id="insert" parameterType="com.qs.entity.BillInfo">
+    insert into t_bw_bill_info (bill_id, bill_type, category_id, 
+      create_by, create_time, is_reimburse, 
+      last_modify_by, last_modify_time, money, 
+      record_date, record_end_date, record_start_date, 
+      remark, status)
+    values (#{billId,jdbcType=VARCHAR}, #{billType,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isReimburse,jdbcType=VARCHAR}, 
+      #{lastModifyBy,jdbcType=VARCHAR}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{money,jdbcType=DECIMAL}, 
+      #{recordDate,jdbcType=TIMESTAMP}, #{recordEndDate,jdbcType=TIMESTAMP}, #{recordStartDate,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.qs.entity.BillInfo">
+        insert into t_bw_bill_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="billId != null">
+                bill_id,
+            </if>
+            <if test="billType != null">
+                bill_type,
+            </if>
+            <if test="categoryId != null">
+                category_id,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="isReimburse != null">
+                is_reimburse,
+            </if>
+            <if test="lastModifyBy != null">
+                last_modify_by,
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="recordDate != null">
+                record_date,
+            </if>
+            <if test="recordEndDate != null">
+                record_end_date,
+            </if>
+            <if test="recordStartDate != null">
+                record_start_date,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="billId != null">
+                #{billId,jdbcType=VARCHAR},
+            </if>
+            <if test="billType != null">
+                #{billType,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryId != null">
+                #{categoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isReimburse != null">
+                #{isReimburse,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifyBy != null">
+                #{lastModifyBy,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="recordDate != null">
+                #{recordDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recordEndDate != null">
+                #{recordEndDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recordStartDate != null">
+                #{recordStartDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_bw_bill_info
+        <set>
+            <if test="record.billId != null">
+                bill_id = #{record.billId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.billType != null">
+                bill_type = #{record.billType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.categoryId != null">
+                category_id = #{record.categoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createBy != null">
+                create_by = #{record.createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.isReimburse != null">
+                is_reimburse = #{record.isReimburse,jdbcType=VARCHAR},
+            </if>
+            <if test="record.lastModifyBy != null">
+                last_modify_by = #{record.lastModifyBy,jdbcType=VARCHAR},
+            </if>
+            <if test="record.lastModifyTime != null">
+                last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.money != null">
+                money = #{record.money,jdbcType=DECIMAL},
+            </if>
+            <if test="record.recordDate != null">
+                record_date = #{record.recordDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.recordEndDate != null">
+                record_end_date = #{record.recordEndDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.recordStartDate != null">
+                record_start_date = #{record.recordStartDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map">
+        update t_bw_bill_info
+        set bill_id = #{record.billId,jdbcType=VARCHAR},
+        bill_type = #{record.billType,jdbcType=VARCHAR},
+        category_id = #{record.categoryId,jdbcType=VARCHAR},
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        is_reimburse = #{record.isReimburse,jdbcType=VARCHAR},
+        last_modify_by = #{record.lastModifyBy,jdbcType=VARCHAR},
+        last_modify_time = #{record.lastModifyTime,jdbcType=TIMESTAMP},
+        money = #{record.money,jdbcType=DECIMAL},
+        record_date = #{record.recordDate,jdbcType=TIMESTAMP},
+        record_end_date = #{record.recordEndDate,jdbcType=TIMESTAMP},
+        record_start_date = #{record.recordStartDate,jdbcType=TIMESTAMP},
+        remark = #{record.remark,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.qs.entity.BillInfo">
+        update t_bw_bill_info
+        <set>
+            <if test="billType != null">
+                bill_type = #{billType,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isReimburse != null">
+                is_reimburse = #{isReimburse,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifyBy != null">
+                last_modify_by = #{lastModifyBy,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DECIMAL},
+            </if>
+            <if test="recordDate != null">
+                record_date = #{recordDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recordEndDate != null">
+                record_end_date = #{recordEndDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recordStartDate != null">
+                record_start_date = #{recordStartDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where bill_id = #{billId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.qs.entity.BillInfo">
+    update t_bw_bill_info
+    set bill_type = #{billType,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_reimburse = #{isReimburse,jdbcType=VARCHAR},
+      last_modify_by = #{lastModifyBy,jdbcType=VARCHAR},
+      last_modify_time = #{lastModifyTime,jdbcType=TIMESTAMP},
+      money = #{money,jdbcType=DECIMAL},
+      record_date = #{recordDate,jdbcType=TIMESTAMP},
+      record_end_date = #{recordEndDate,jdbcType=TIMESTAMP},
+      record_start_date = #{recordStartDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where bill_id = #{billId,jdbcType=VARCHAR}
+  </update>
+</mapper>
